@@ -3,6 +3,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entity.Message;
+import com.example.entity.Account;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,19 @@ public class MessageService {
     }
 
     @Transactional 
-    public Message updateMessage(Message message){
+    public Message updateMessage(Integer messageId, String newMessageText){
+        Message existingMessage = messageRepository.findByMessageId(messageId);
+        if(existingMessage == null || newMessageText.isBlank() || newMessageText.length() > 255){
+            return null;
+        }
+        existingMessage.setMessageText(newMessageText);
         
+
+        return messageRepository.save(existingMessage);
+
+    }
+
+    public List<Message> getAllMessagesByAccountId(Integer accountId){
+        return messageRepository.findAllByPostedBy(accountId);
     }
 }

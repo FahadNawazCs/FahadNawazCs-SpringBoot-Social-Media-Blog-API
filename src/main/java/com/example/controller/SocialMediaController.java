@@ -104,8 +104,20 @@ public class SocialMediaController {
  }
 
  @PatchMapping("/messages/{messageId}")
- ResponseEntity<Message> updateMessage(@RequestBody MessagePatchRequest request, @PathVariable Integer messageId){
-    return ResponseEntity.ok(null);
+ ResponseEntity<Integer> updateMessage(@RequestBody MessagePatchRequest request, @PathVariable Integer messageId){
+    Message updatedMessage = messageService.updateMessage(messageId,request.getMessageText() );
+    if(updatedMessage == null){
+        return ResponseEntity.status(400).body(null);
+    }
+    return ResponseEntity.ok(1);
+
+ }
+
+ @GetMapping("/accounts/{accountId}/messages")
+ ResponseEntity<List<Message>> getAllMessagesByAccouuntId(@PathVariable Integer accountId){
+    List<Message> allMessages =  messageService.getAllMessagesByAccountId(accountId);
+    
+    return ResponseEntity.ok(allMessages);
  }
 
     
